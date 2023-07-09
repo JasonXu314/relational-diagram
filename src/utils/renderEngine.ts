@@ -4,6 +4,7 @@ interface TextStyles {
 	underline: boolean;
 	underlineStyle: string | CanvasGradient | CanvasPattern;
 	underlineDashed: boolean;
+	font: string;
 }
 
 interface ShapeStyles {
@@ -151,11 +152,13 @@ export class RenderEngine {
 		const defaultStyles: TextStyles = {
 			underline: false,
 			underlineStyle: 'black',
-			underlineDashed: false
+			underlineDashed: false,
+			font: '12px sans-serif'
 		};
 		const sx = { ...defaultStyles, ...styles };
 
 		this.context.fillStyle = 'black';
+		this.context.font = sx.font;
 
 		this.context.fillText(text, x, y);
 
@@ -175,6 +178,8 @@ export class RenderEngine {
 			this.context.strokeStyle = 'black';
 			this.context.setLineDash([]);
 		}
+
+		this.context.font = '12px sans-serif';
 	}
 
 	public circle(center: Point, radius: number): void {
@@ -230,8 +235,20 @@ export class RenderEngine {
 		this.context.fill();
 	}
 
-	public measure(text: string): TextMetrics {
-		return this.context.measureText(text);
+	public measure(text: string, styles: Partial<TextStyles> = {}): TextMetrics {
+		const defaultStyles: TextStyles = {
+			underline: false,
+			underlineStyle: 'black',
+			underlineDashed: false,
+			font: '12px sans-serif'
+		};
+		const sx = { ...defaultStyles, ...styles };
+
+		this.context.font = sx.font;
+		const metrics = this.context.measureText(text);
+		this.context.font = '12px sans-serif';
+
+		return metrics;
 	}
 
 	public spaceToCanvas(point: Point): Point {

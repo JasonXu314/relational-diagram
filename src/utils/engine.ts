@@ -123,6 +123,8 @@ export class Engine {
 		if (!(entity instanceof Reference)) {
 			const toRemove = this.entities.filter((e) => e instanceof Reference && (e.from === entity || e.to === entity));
 			toRemove.forEach((line) => this.entities.splice(this.entities.indexOf(line), 1));
+		} else {
+			this.references.splice(this.references.indexOf(entity), 1);
 		}
 	}
 

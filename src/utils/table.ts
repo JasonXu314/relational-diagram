@@ -33,8 +33,8 @@ export class Table extends Entity {
 		const height = 30,
 			idx = Table._instances.indexOf(this);
 		this.width = this.columns.reduce((total, col) => total + col.width, 0);
-		const textMetrics = renderEngine.measure(this.name);
-		const labelWidth = textMetrics.actualBoundingBoxRight - textMetrics.actualBoundingBoxLeft + 15;
+		const textMetrics = renderEngine.measure(this.name, { font: 'bold 15px sans-serif' });
+		const labelWidth = textMetrics.actualBoundingBoxRight + textMetrics.actualBoundingBoxLeft;
 
 		let refAdjustment = 0;
 		for (const ref of metadata.references) {
@@ -61,7 +61,7 @@ export class Table extends Entity {
 		);
 
 		renderEngine.fillRect(this.position, this.width, height, 'white');
-		renderEngine.text(this.position.add(new Point(-this.width / 2 + labelWidth / 2, 30)), this.name);
+		renderEngine.text(this.position.add(new Point(-this.width / 2 + labelWidth / 2, 30)), this.name, { font: 'bold 15px sans-serif' });
 
 		this.columns.forEach((col) => col.render(renderEngine, metadata));
 		if (Table.showAddBtn) {
@@ -73,6 +73,10 @@ export class Table extends Entity {
 		const column = new Column(this, data.label, data.key);
 
 		this.columns.push(column);
+	}
+
+	public removeColumn(col: Column): void {
+		this.columns.splice(this.columns.indexOf(col), 1);
 	}
 
 	public selectedBy(point: Point): boolean | Entity {

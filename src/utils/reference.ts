@@ -70,7 +70,7 @@ export class Reference extends Entity {
 
 				if (ref.recursive && ref.from === this.to) {
 					targetSpacing += REFERENCE_SPACING;
-				} else if (ref.from.parent === this.to.parent) {
+				} else if (ref.from.parent === this.to.parent || (!past && ref.to.parent === this.to.parent)) {
 					targetSpacing += REFERENCE_SPACING;
 				}
 			}

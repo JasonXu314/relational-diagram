@@ -115,7 +115,7 @@
 				if (metadata.button === MouseButton.LEFT && entity instanceof Column) {
 					if (!from) {
 						from = entity;
-					} else {
+					} else if (from !== entity) {
 						to = entity;
 
 						const line = new Reference(from, to);
@@ -214,7 +214,7 @@
 		<Button color="red" on:click={cancelLine}>Cancel</Button>
 	{:else}
 		<Tooltip label="Hotkey: c (Connect)">
-			<Button use={[[hotkey, modalState === ModalState.NONE ? [['c', createLine]] : []]]} on:click={createLine}>Line</Button>
+			<Button use={[[hotkey, modalState === ModalState.NONE ? [['c', createLine]] : []]]} on:click={createLine}>Reference</Button>
 		</Tooltip>
 	{/if}
 	<Checkbox label="Show Add Buttons" bind:checked={Table.showAddBtn} />
@@ -256,10 +256,10 @@
 			menuLocation = null;
 		}}
 		on:delete={(evt) => {
-			const entity = evt.detail;
+			const table = evt.detail;
 
 			if (engine) {
-				engine.remove(entity);
+				engine.remove(table);
 			}
 		}}
 	/>
@@ -273,10 +273,10 @@
 			menuLocation = null;
 		}}
 		on:delete={(evt) => {
-			const attribute = evt.detail;
+			const column = evt.detail;
 
 			if (engine) {
-				engine.remove(attribute);
+				column.parent.removeColumn(column);
 			}
 		}}
 	/>
